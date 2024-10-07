@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:5.0
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://root:example@mongo:27017
+
+volumes:
+  mongo-data:
